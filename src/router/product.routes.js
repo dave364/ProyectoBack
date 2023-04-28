@@ -5,28 +5,56 @@ const ProductRouter = Router()
 const product = new ProductManager();
 
 ProductRouter.get("/", async (req, res) =>{
-    res.send(await product.getProducts())
+    const io = req.app.get('socketio');
+    io.emit("showProducts",  await product.getProducts() );
+    res.send({
+        status: 'success'
+    })
 });
 
 ProductRouter.get("/:id", async (req, res) =>{
+    const io = req.app.get('socketio');
+
     let id = req.params.id
-    res.send(await product.getProductsById(id))
+    await product.getProductsById(id)
+    io.emit("showProducts", await product.getProducts() );
+    res.send({
+        status: 'success'
+    })
 });
 
 ProductRouter.post("/", async (req, res) =>{
+    const io = req.app.get('socketio');
+
    let newProducts = req.body
-   res.send(await product.addProducts(newProducts)) 
+   await product.addProducts(newProducts)
+   io.emit("showProducts", await product.getProducts() );
+    res.send({
+        status: 'success'
+    }) 
 });
 
 ProductRouter.put("/:id", async (req,res) => {
+    const io = req.app.get('socketio');
+
     let id = req.params.id
     let updateProduct = req.body;
-    res.send(await product.updateProducts(id, updateProduct))
+    await product.updateProducts(id, updateProduct)
+    io.emit("showProducts", await product.getProducts() );
+    res.send({
+        status: 'success'
+    }) 
 });
 
 ProductRouter.delete("/:id", async (req,res) => {
+    const io = req.app.get('socketio');
+
     let id = req.params.id
-    res.send(await product.deleteProducts(id))
+    await product.deleteProducts(id)
+    io.emit("showProducts", await product.getProducts() );
+    res.send({
+        status: 'success'
+    }) 
 });
 
 export default ProductRouter;

@@ -1,0 +1,33 @@
+<div>  
+
+WEBSOCKETS
+
+</div>
+  <div id="container">
+
+    </div>
+
+<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+<script>
+      const socket = io()
+
+const container = document.getElementById('container')
+
+
+socket.on('showProducts', data => {
+      console.log(data);
+    container.innerHTML = ``
+if ( data.length > 0 ) {
+    data.forEach(prod => {
+        container.innerHTML += `
+            <ul>
+                <li>stock: ${prod.nombre}</li>
+                <li>category: ${prod.apellido}</li>
+                <li>edad: ${prod.edad}</li>
+                <li>id: ${prod.id}</li>
+            </ul>
+        `   
+        
+    }) }
+})
+</script>

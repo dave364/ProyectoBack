@@ -5,6 +5,7 @@ import * as path from "path";
 import ProductRouter from "./router/product.routes.js";
 import CartRouter from "./router/carts.routes.js";
 import ProductManager from "./controllers/ProductManager.js";
+import { Server } from "socket.io";
 
 
 
@@ -19,6 +20,7 @@ app.use("/api/products", ProductRouter)
 app.use("/api/cart", CartRouter)
 
 
+
 //HANDLEBARS
 app.engine("handlebars", engine());
 app.set("view engine", "handlebars")
@@ -31,7 +33,7 @@ app.use("/", express.static(__dirname + "/public"))
 
 app.get("/", async (req, res) => {
     let allproducts = await product.getProducts()
-    res.render("home", {
+    res.render("realTimeProducts", {
         title : "Backend | Handlebars",
         products : allproducts
     });  
@@ -46,8 +48,13 @@ app.get("/:id", async (req, res) => {
 });
 
 
-
-
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
     console.log(`servidor express Puerto ${PORT}`);
 });
+
+
+const io = new Server(server);
+
+app.set('socketio', io);
+
+
