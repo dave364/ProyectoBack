@@ -6,6 +6,7 @@ import ProductRouter from "./router/product.routes.js";
 import CartRouter from "./router/carts.routes.js";
 import ProductManager from "./controllers/ProductManager.js";
 import { Server } from "socket.io";
+//import { io } from "socket.io-client";
 
 
 
@@ -52,9 +53,15 @@ const server = app.listen(PORT, () => {
     console.log(`servidor express Puerto ${PORT}`);
 });
 
+const ioServer = new Server(server);
 
-const io = new Server(server);
+app.set('socketio', ioServer);
 
-app.set('socketio', io);
+
+ioServer.on('addProducts', data => {
+    console.log(data);
+
+  
+})
 
 

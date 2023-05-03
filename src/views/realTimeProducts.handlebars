@@ -1,6 +1,32 @@
 <div>  
 
-WEBSOCKETS
+<div>
+<form id="miFormulario">
+  <label for="nombre">nombre:</label>
+  <input type="text" id="nombre" name="nombre">
+  <br>
+
+  <label for="apellido">apellido:</label>
+  <input type="text" id="apellido" name="apellido">
+  <br>
+
+  <label for="edad">edad:</label>
+  <input type="text" id="edad" name="edad"></input>
+  <br>
+
+  <label for="id">id:</label>
+  <input type="text" id="id" name="id"></input>
+  <br>
+
+  <button type="submit">Enviar</button>
+</form>
+        
+    <h1>Productos Actuales</h1>
+    <div id="mostrarProductos">
+
+    </div>
+    
+</div>
 
 </div>
   <div id="container">
@@ -20,14 +46,53 @@ socket.on('showProducts', data => {
 if ( data.length > 0 ) {
     data.forEach(prod => {
         container.innerHTML += `
-            <ul>
-                <li>stock: ${prod.nombre}</li>
-                <li>category: ${prod.apellido}</li>
-                <li>edad: ${prod.edad}</li>
-                <li>id: ${prod.id}</li>
-            </ul>
-        `   
+                <div id="cart">
+                    <p><span class="keyDer"> ID : </span>${element.id}</p>
+                    <p><span class="keyDer"> TITULO : </span> ${element.title}</p>
+                    <p><span class="keyDer"> DESCRIPCION : </span> ${element.description}</p>
+                    <p><span class="keyDer"> PRECIO: </span> $${element.price}</p>
+                    <p><span class="keyDer"> THUMBNAIL : </span> ${element.thumbnail} </p>
+                    <p><span class="keyDer"> CODIGO : </span> ${element.code}  </p>
+                    <p><span class="keyDer"> STOCK : </span> ${element.stock}</p>
+                    <p><span class="keyDer"> CATEGORIA : </span> ${element.category}</p>
+                    <p><span class="keyDer"> STATUS: </span> ${element.status} </p>
+                    <button id="${element.id}">Eliminar</button>
+                </div>`  
         
     }) }
+    
 })
 </script>
+
+<script>
+const miFormulario = document.getElementById("miFormulario");
+
+miFormulario.addEventListener("submit", function(event) {
+  event.preventDefault(); // Evita que el formulario se envíe automáticamente
+
+  const datosFormulario = new FormData(miFormulario);
+
+  // Accede a los datos del formulario utilizando los nombres de los campos
+  const nombre = datosFormulario.get("nombre");
+  const apellido = datosFormulario.get("apellido");
+  const edad = datosFormulario.get("edad");
+  const id = datosFormulario.get("id");
+
+  const productsForm ={
+    nombre,
+    apellido,
+    edad,
+    id
+  }
+
+  console.log('addProduct',productsForm)
+
+  socket.emit('addProducts',productsForm) 
+
+});
+
+
+</script>
+
+
+
