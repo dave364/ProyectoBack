@@ -60,7 +60,7 @@ app.set('socketio', io);
 
 
 io.on ('connection',async socket=>{
-    console.log("Nuevo socket conectado")
+    console.log("Cliente socket conectado")
 
     socket.on('addProducts',async data=>{
         console.log("addProducts conectado")
@@ -83,7 +83,7 @@ io.on ('connection',async socket=>{
     })
 
     socket.on('disconnect', () => {
-        console.log("socket desconectado")
+        console.log("Cliente socket desconectado")
     });
 
 })
