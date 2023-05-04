@@ -53,15 +53,38 @@ const server = app.listen(PORT, () => {
     console.log(`servidor express Puerto ${PORT}`);
 });
 
-const ioServer = new Server(server);
-
-app.set('socketio', ioServer);
+const io = new Server(server);
 
 
-ioServer.on('addProducts', data => {
-    console.log(data);
+app.set('socketio', io);
 
-  
+
+io.on ('connection',async socket=>{
+    console.log("Nuevo socket conectado")
+
+    socket.on('addProducts',async data=>{
+        console.log("addProducts conectado")
+        await product.addProducts(data)
+        let allproducts = await product.getProducts()
+        socket.emit('showProducts',allproducts);
+    })
+
+    socket.on('getProducts',async ()=>{
+        console.log("getProducts conectado")
+        let allproducts = await product.getProducts()
+        socket.emit('showProducts',allproducts);
+    })
+
+    socket.on('deleteProducts',async data=>{
+        console.log("deleteProducts conectado",data)
+        await product.deleteProducts(data)
+        let allproducts = await product.getProducts()
+        socket.emit('showProducts',allproducts);
+    })
+
+    socket.on('disconnect', () => {
+        console.log("socket desconectado")
+    });
+
 })
-
 

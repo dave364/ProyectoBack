@@ -14,10 +14,6 @@
   <input type="text" id="edad" name="edad"></input>
   <br>
 
-  <label for="id">id:</label>
-  <input type="text" id="id" name="id"></input>
-  <br>
-
   <button type="submit">Enviar</button>
 </form>
         
@@ -39,32 +35,34 @@
 
 const container = document.getElementById('container')
 
+const getProduct = () => {
+  socket.emit('getProducts')    
+}
+
+
+const deleteButton = (id) => {
+  console.log('deleteProducts',id)
+  socket.emit('deleteProducts',id)   
+}
 
 socket.on('showProducts', data => {
-      console.log(data);
+      console.log("showProducts",data);
     container.innerHTML = ``
 if ( data.length > 0 ) {
     data.forEach(prod => {
         container.innerHTML += `
                 <div id="cart">
-                    <p><span class="keyDer"> ID : </span>${element.id}</p>
-                    <p><span class="keyDer"> TITULO : </span> ${element.title}</p>
-                    <p><span class="keyDer"> DESCRIPCION : </span> ${element.description}</p>
-                    <p><span class="keyDer"> PRECIO: </span> $${element.price}</p>
-                    <p><span class="keyDer"> THUMBNAIL : </span> ${element.thumbnail} </p>
-                    <p><span class="keyDer"> CODIGO : </span> ${element.code}  </p>
-                    <p><span class="keyDer"> STOCK : </span> ${element.stock}</p>
-                    <p><span class="keyDer"> CATEGORIA : </span> ${element.category}</p>
-                    <p><span class="keyDer"> STATUS: </span> ${element.status} </p>
-                    <button id="${element.id}">Eliminar</button>
+                    <p><span class="keyDer"> Nombre : </span>${prod.nombre}</p>
+                    <p><span class="keyDer"> Apellido : </span>${prod.apellido}</p>
+                    <p><span class="keyDer"> Edad : </span>${prod.edad}</p>
+                    <p><span class="keyDer"> ID : </span>${prod.id}</p>
+                     <button id="${prod.id}" onclick="deleteButton('${prod.id}')">Eliminar</button>
                 </div>`  
-        
+         
     }) }
     
 })
-</script>
 
-<script>
 const miFormulario = document.getElementById("miFormulario");
 
 miFormulario.addEventListener("submit", function(event) {
@@ -81,17 +79,15 @@ miFormulario.addEventListener("submit", function(event) {
   const productsForm ={
     nombre,
     apellido,
-    edad,
-    id
+    edad
   }
 
-  console.log('addProduct',productsForm)
-
-  socket.emit('addProducts',productsForm) 
+  console.log('addProducts',productsForm)
+  socket.emit('addProducts',productsForm)    
 
 });
 
-
+getProduct()
 </script>
 
 
