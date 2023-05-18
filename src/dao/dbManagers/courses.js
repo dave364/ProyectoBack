@@ -1,4 +1,4 @@
-import { courseModel } from "../../modeLs/courses";
+import { courseModel } from "../modeLs/courses.js";
 
 export default class Courses {
     constructor() {

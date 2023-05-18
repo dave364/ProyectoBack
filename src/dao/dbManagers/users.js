@@ -1,4 +1,4 @@
-import { userModel } from "../../modeLs/users";
+import { userModel } from "../modeLs/users.js";
 
 export default class Users {
     constructor() {

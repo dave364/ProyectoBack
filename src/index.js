@@ -2,9 +2,9 @@ import express from "express";
 //import { engine } from "express-handlebars";
 import __dirname from "./utils.js";
 //import * as path from "path";
-import usersRouter from './routes/users.js'
-import coursesRouter from './routes/courses.js'
-import viewsRouter from './routes/views.js'
+import usersRouter from './router/users.js'
+import coursesRouter from './router/courses.js'
+import viewsRouter from './router/views.router.js'
 import handlebars from 'express-handlebars';
 import mongoose from 'mongoose';
 //import ProductRouter from "./router/product.routes.js";
