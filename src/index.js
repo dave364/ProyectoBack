@@ -1,17 +1,84 @@
 import express from "express";
-import { engine } from "express-handlebars";
+//import { engine } from "express-handlebars";
 import __dirname from "./utils.js";
-import * as path from "path";
-import ProductRouter from "./router/product.routes.js";
-import CartRouter from "./router/carts.routes.js";
-import ProductManager from "./controllers/ProductManager.js";
-import { Server } from "socket.io";
+//import * as path from "path";
+import usersRouter from './routes/users.js'
+import coursesRouter from './routes/courses.js'
+import viewsRouter from './routes/views.js'
+import handlebars from 'express-handlebars';
+import mongoose from 'mongoose';
+//import ProductRouter from "./router/product.routes.js";
+//import CartRouter from "./router/carts.routes.js";
+//import ProductManager from "./controllers/ProductManager.js";
+//import { Server } from "socket.io";
 //import { io } from "socket.io-client";
 
 
 
-const app = express()
-const PORT = 4000
+const app = express();
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.engine('handlebars', handlebars.engine());
+app.set('views', `${__dirname}/views`);
+app.set('view engine', 'handlebars');
+
+app.use('/', viewsRouter);
+app.use('/api/users', usersRouter);
+app.use('/api/courses', coursesRouter);
+
+try {
+    await mongoose.connect('mongodb+srv://castrodavid9872:ItNaMTm4F5cwWs0v@cluster364da.jqgneo9.mongodb.net/?retryWrites=true&w=majority');
+    console.log('DB CONNECTED')
+} catch (error) {
+    console.log(error);
+}
+
+app.listen(8080);
+
+//ItNaMTm4F5cwWs0v
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*const PORT = 4000
 const product = new ProductManager();
 
 app.use(express.json())
@@ -87,4 +154,4 @@ io.on ('connection',async socket=>{
     });
 
 })
-
+*/
