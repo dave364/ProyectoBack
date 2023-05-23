@@ -1,19 +1,28 @@
-import {promises as fs} from "fs"
+import fs from "fs/promises";
 import { nanoid } from "nanoid";
+import { productModel } from "../dao/modeLs/products.js";
 
 class ProductManager {
     constructor() {
-        this.path = "./src/modeLs/products.json"
     }
 
-    readProducts = async () => {
-        let products = await fs.readFile(this.path, "utf-8")
-        return JSON.parse(products);
-    }
+    readProducts = async (page,orderBy) => {
+        try {
+        const order = orderBy == 0 ? {} : {price:orderBy}
+        const options = {
+            page: page,
+            limit: 2,
+            sort: order
+        };
 
-    writeProducts = async (product) => {
-        await fs.writeFile(this.path, JSON.stringify(product));
-    };
+        const products = await productModel.paginate({}, options);
+        return products  
+        } catch (error) {
+          console.error("Error al leer los productos:", error);
+          throw error;
+        }
+      };
+
 
     exist = async (id) => {
         let products = await this.readProducts();
@@ -21,15 +30,12 @@ class ProductManager {
     }
 
     addProducts = async (product) =>{
-        let productsOld = await this.readProducts()
-        product.id = nanoid()
-        let productAll = [...productsOld, product]
-        await this.writeProducts(productAll);
-        return "Producto Agregado";
+      const result = await productModel.create(product);
+      return result;
     };
 
-    getProducts = async () => {
-        return await this.readProducts()
+    getProducts = async (page,order) => {
+        return await this.readProducts(page,order)
     };
 
     getProductsById = async (id) => {

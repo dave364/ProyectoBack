@@ -1,29 +1,22 @@
 import { Router } from 'express';
-import Users from '../dao/dbManagers/users.js'
-import Courses from '../dao/dbManagers/courses.js'
+import Products from '../dao/dbManagers/products.js'
+import Courses from '../dao/dbManagers/carts.js'
 
 const router = Router();
 
-const usersManager = new Users();
-const coursesManager = new Courses();
+const productsManager = new Products();
+
 
 router.get('/', async (req, res) => {
     try {
-        const users = await usersManager.getAll();
-        res.render('users', { users })   
+        const products = await productsManager.getAll();
+        res.render('products', { products })   
     } catch (error) {
         console.log(error);
     }
 })
 
-router.get('/courses', async (req, res) => {
-    try {
-        const courses = await coursesManager.getAll();
-        res.render('courses', { courses })   
-    } catch (error) {
-        console.log(error);
-    }
-});
+
 
 export default router;
 

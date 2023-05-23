@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import Courses from '../dao/dbManagers/courses.js';
+import Courses from '../dao/dbManagers/carts.js';
 
 const router = Router();
 const coursesManager = new Courses();

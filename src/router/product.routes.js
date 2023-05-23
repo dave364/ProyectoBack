@@ -6,9 +6,13 @@ const product = new ProductManager();
 
 ProductRouter.get("/", async (req, res) =>{
     const io = req.app.get('socketio');
-    io.emit("showProducts",  await product.getProducts() );
+    const products = await product.getProducts()
+    console.log("products",products)
+    io.emit("showProducts",  products );
+
     res.send({
-        status: 'success'
+        status: 'success',
+        data: products
     })
 });
 
@@ -19,7 +23,8 @@ ProductRouter.get("/:id", async (req, res) =>{
     await product.getProductsById(id)
     io.emit("showProducts", await product.getProducts() );
     res.send({
-        status: 'success'
+        status: 'success',
+        data: productById
     })
 });
 
@@ -34,7 +39,7 @@ ProductRouter.post("/", async (req, res) =>{
     }) 
 });
 
-ProductRouter.put("/:id", async (req,res) => {
+ProductRouter.put("/:_id", async (req,res) => {
     const io = req.app.get('socketio');
 
     let id = req.params.id
