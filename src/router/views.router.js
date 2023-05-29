@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import Products from '../dao/dbManagers/products.js'
-import Courses from '../dao/dbManagers/carts.js'
+import carrito from '../dao/dbManagers/carts.js'
 
 const router = Router();
 
@@ -14,6 +14,12 @@ router.get('/', async (req, res) => {
     } catch (error) {
         console.log(error);
     }
+})
+
+router.get("/carts/:cid" , async (req,res) => {
+    const carritoId = await carrito.getCartsByID(req.params.cid).populate("products.product");
+    console.log(carritoId);
+    res.render("products",{carritoId})
 })
 
 

@@ -2,16 +2,12 @@ import express from "express";
 import { engine } from "express-handlebars";
 import __dirname from "./utils.js";
 import * as path from "path";
-import usersRouter from './router/users.js'
-import coursesRouter from './router/courses.js'
 import viewsRouter from './router/views.router.js'
-import handlebars from 'express-handlebars';
 import mongoose from 'mongoose';
 import ProductRouter from "./router/product.routes.js";
-//import CartRouter from "./router/carts.routes.js";
+import CartRouter from "./router/cart.routes.js"
 import ProductManager from "./controllers/ProductManager.js";
 import { Server } from "socket.io";
-//import { io } from "socket.io-client";
 
 
 
@@ -53,24 +49,11 @@ const product = new ProductManager();
 app.use("/api/products", ProductRouter)
 
 
-/*app.get("/", async (req, res) => {
-    let allproducts = await product.getProducts()
-    res.render("realTimeProducts", {
-        title : "Backend | Handlebars",
-        products : allproducts
-    });  
-});*/
+app.use("/api/carts", CartRouter)
 
-app.get("/api/cart", (req, res) => res.send("Users Cart"))
+//app.get("/api/cart", (req, res) => res.send("Users Cart"))
 
-/*app.get("/:id", async (req, res) => {
-    let users = await product.getProductsById(req.params.id)
-    res.render("products", {
-        title : "Backend | Handlebars",
-        products : users
-    });  
-});
-*/
+
 
 const server = app.listen(PORT, () => {
     console.log(`servidor express Puerto ${PORT}`);

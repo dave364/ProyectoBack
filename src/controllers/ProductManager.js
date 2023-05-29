@@ -1,6 +1,6 @@
-import fs from "fs/promises";
-import { nanoid } from "nanoid";
 import { productModel } from "../dao/modeLs/products.js";
+
+
 
 class ProductManager {
     constructor() {
@@ -11,7 +11,7 @@ class ProductManager {
         const order = orderBy == 0 ? {} : {price:orderBy}
         const options = {
             page: page,
-            limit: 2,
+            limit: 4,
             sort: order
         };
 
