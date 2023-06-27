@@ -124,6 +124,25 @@ socket.on('showProducts', (data,order) => {
 
 getProduct(0)
 
+function addToCart(products) {
+    fetch(`/carts/:cid/products/${products}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ quantity: 1 })
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Procesar la respuesta del servidor, por ejemplo, mostrar un mensaje de éxito
+        console.log('Producto agregado al carrito:', data);
+    })
+    .catch(error => {
+        console.log('Error al agregar el producto al carrito:', error);
+    });
+}
+
+
 </script>
 <style>
 

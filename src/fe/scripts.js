@@ -5,11 +5,11 @@ let order = {
   items: [],
 };
 
-function add(productId, price) {
-  const product = productList.find((p) => p.id === productId);
+function add(products, price) {
+  const product = productList.find((p) => p.id === products);
   product.stock--;
 
-  const productInOrder = order.items.find((p) => p.id === productId);
+  const productInOrder = order.items.find((p) => p.id === products);
   if (productInOrder) {
     productInOrder.quantity = productInOrder.quantity + 1;
   }
@@ -22,7 +22,7 @@ function add(productId, price) {
     });
   }
 
-  console.log(productId, price);
+  console.log(products, price);
 
   order.total = order.total + price;
   document.getElementById("checkout").innerHTML = `Carrito $${order.total}`;

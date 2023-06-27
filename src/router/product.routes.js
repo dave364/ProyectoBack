@@ -1,65 +1,70 @@
 import { Router } from "express";
-import ProductManager from "../controllers/ProductManager.js";
+import { Products } from "../dao/dbManagers/products.js";
 
-const ProductRouter = Router()
-const product = new ProductManager();
+const ProductRouter = Router();
+const product = new Products();
 
-ProductRouter.get("/", async (req, res) =>{
+// Obtener todos los productos
+ProductRouter.get("/", async (req, res) => {
     const io = req.app.get('socketio');
-    const products = await product.getProducts()
-    console.log("products",products)
-    io.emit("showProducts",  products );
+    const products = await product.getAll();
+    console.log("products", products);
+    io.emit("showProducts", products);
 
     res.send({
         status: 'success',
         data: products
-    })
+    });
 });
 
-ProductRouter.get("/:id", async (req, res) =>{
+// Obtener un producto por su ID
+ProductRouter.get("/:id", async (req, res) => {
     const io = req.app.get('socketio');
 
-    let id = req.params.id
-    await product.getProductsById(id)
-    io.emit("showProducts", await product.getProducts() );
+    let id = req.params.id;
+    const productById = await product.getProductsById(id);
+    io.emit("showProducts", await product.getAll());
     res.send({
         status: 'success',
         data: productById
-    })
+    });
 });
 
-ProductRouter.post("/", async (req, res) =>{
+// Agregar un nuevo producto
+ProductRouter.post("/", async (req, res) => {
     const io = req.app.get('socketio');
 
-   let newProducts = req.body
-   await product.addProducts(newProducts)
-   io.emit("showProducts", await product.getProducts() );
+    let newProduct = req.body;
+    await product.save(newProduct);
+    io.emit("showProducts", await product.getAll());
     res.send({
         status: 'success'
-    }) 
+    });
 });
 
-ProductRouter.put("/:_id", async (req,res) => {
+// Actualizar un producto por su ID
+ProductRouter.put("/:_id", async (req, res) => {
     const io = req.app.get('socketio');
 
-    let id = req.params.id
+    let id = req.params.id;
     let updateProduct = req.body;
-    await product.updateProducts(id, updateProduct)
-    io.emit("showProducts", await product.getProducts() );
+    await product.updateProducts(id, updateProduct);
+    io.emit("showProducts", await product.getAll());
     res.send({
         status: 'success'
-    }) 
+    });
 });
 
-ProductRouter.delete("/:id", async (req,res) => {
+// Eliminar un producto por su ID
+ProductRouter.delete("/:id", async (req, res) => {
     const io = req.app.get('socketio');
 
-    let id = req.params.id
-    await product.deleteProducts(id)
-    io.emit("showProducts", await product.getProducts() );
+    let id = req.params.id;
+    await product.deleteProducts(id);
+    io.emit("showProducts", await product.getAll());
     res.send({
         status: 'success'
-    }) 
+    });
 });
 
 export default ProductRouter;
